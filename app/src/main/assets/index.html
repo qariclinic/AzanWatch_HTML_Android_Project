@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#073b2a">
+<title>آذان واچ | Made by Mufti Shoaib Allai</title>
+<style>
+:root{--bg:#071d18;--panel:#0d3027;--gold:#e8c66a;--cream:#fff8e7;--muted:#b7c9be;--line:#285447}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#061711,#0d3528 55%,#081d19);color:var(--cream);font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",Tahoma,Arial,sans-serif}
+header{padding:22px 16px 18px;text-align:center;border-bottom:1px solid var(--line);background:#061711bb}
+.brand{font-size:28px;color:var(--gold);font-weight:bold}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+.wrap{max-width:1000px;margin:auto;padding:14px}.hero{border:1px solid #927b3c;border-radius:18px;padding:18px;background:linear-gradient(135deg,#124735,#08251d);text-align:center}
+.time{font-family:Arial,sans-serif;font-size:42px;font-weight:bold;direction:ltr;color:var(--gold);letter-spacing:2px}.date{line-height:1.9;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:12px 0}
+.card{background:#0d3027;border:1px solid var(--line);border-radius:14px;padding:13px}.card h3{margin:0 0 8px;color:var(--gold);font-size:16px}.big{font-size:21px;font-weight:bold}.muted{color:var(--muted);font-size:13px}
+.next{border:1px solid var(--gold);background:#163e30}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 2px;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.ticker{overflow:hidden;white-space:nowrap;background:#e8c66a;color:#11291f;padding:10px 0;margin:12px 0;border-radius:8px;font-weight:bold}.ticker span{display:inline-block;padding-right:100%;animation:scroll 38s linear infinite}@keyframes scroll{to{transform:translateX(-100%)}}
+button,select,input{font:inherit;border-radius:9px;border:1px solid #507565;padding:9px;background:#071d18;color:var(--cream)}button{background:var(--gold);color:#17251a;font-weight:bold;cursor:pointer;border:0}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.dhikr{line-height:2.1;font-size:18px}.footer{text-align:center;color:var(--gold);padding:22px 8px;font-size:13px}
+.note{font-size:12px;color:var(--muted);line-height:1.8}.pill{display:inline-block;border:1px solid var(--line);border-radius:20px;padding:4px 10px;margin:3px}
+</style></head>
+<body>
+<header><div class="brand">◈ آذان واچ ◈</div><div class="sub">نماز • تقویم • موسم • اذکار</div></header>
+<main class="wrap">
+<section class="hero"><div id="clock" class="time">--:--:--</div><div class="date" id="dateLine">تاریخ معلوم کی جا رہی ہے…</div><div class="muted" id="location">مقام: دستی طور پر شہر منتخب کریں</div></section>
+<div class="grid">
+ <div class="card"><h3>موسم / درجہ حرارت</h3><div class="big" id="weather">—</div><div class="muted" id="weatherNote">موسم کے لیے انٹرنیٹ اور مقام کی اجازت درکار ہے</div><div class="controls"><button onclick="getWeather()">موسم معلوم کریں</button></div></div>
+ <div class="card next"><h3>اگلی نماز</h3><div class="big" id="nextPrayer">فجر</div><div id="nextTime" class="muted">—</div><div class="muted" id="countdown">—</div></div>
+ <div class="card"><h3>الارم</h3><div class="muted">اپنے لیے یاددہانی مقرر کریں</div><div class="controls"><input id="alarmTime" type="time" aria-label="الارم کا وقت"><button onclick="setAlarm()">الارم لگائیں</button></div><div id="alarmStatus" class="muted">کوئی الارم مقرر نہیں</div></div>
+ <div class="card"><h3>شمسی / ہجری تاریخ</h3><div id="solar" class="big">—</div><div id="hijri" class="muted">ہجری تاریخ اندازاً</div></div>
+</div>
+<section class="card"><h3>نمازوں کے اوقات</h3><div id="prayerList"><div class="muted">مقام منتخب کرنے کے بعد اوقات حساب ہوں گے۔</div></div><div class="controls"><label>شہر/مقام <input id="city" value="Mansehra" aria-label="شہر"></label><label>عرض بلد <input id="lat" type="number" step="any" value="34.33" style="width:95px"></label><label>طول بلد <input id="lon" type="number" step="any" value="73.20" style="width:95px"></label><button onclick="calculate()">اوقات اپ ڈیٹ کریں</button></div><p class="note">یہ اوقات مقامی حسابی اندازے ہیں، سرکاری/مقامی مسجد کے اوقات سے چند منٹ فرق ممکن ہے۔ درستگی کے لیے اپنے علاقے کے مستند اوقات کی تصدیق کریں۔</p></section>
+<div class="ticker"><span>فجر • ظہر • عصر • مغرب • عشاء • جمعہ • عیدالفطر • عیدالاضحیٰ • اشراق • چاشت • تہجد • اذکارِ صبح و شام • نماز کی پابندی زندگی کی روشنی ہے • </span></div>
+<div class="grid">
+ <section class="card"><h3>نوافل کے اوقات (تقریبی)</h3><div class="row"><span>اشراق</span><b id="ishraq">—</b></div><div class="row"><span>چاشت</span><b id="chasht">—</b></div><div class="row"><span>تہجد</span><b id="tahajjud">—</b></div><div class="row"><span>عیدین</span><b>طلوعِ آفتاب کے بعد</b></div><p class="note">عیدین کا حتمی وقت مقامی مسجد/اعلان کے مطابق ہوگا۔ تہجد کا وقت رات کے آخری تہائی حصے میں افضل ہے۔</p></section>
+ <section class="card"><h3>اذکار</h3><div class="dhikr">سُبْحَانَ اللّٰهِ — ۳۳ مرتبہ<br>اَلْحَمْدُ لِلّٰهِ — ۳۳ مرتبہ<br>اَللّٰهُ أَكْبَرُ — ۳۴ مرتبہ<br>أَسْتَغْفِرُ اللّٰهَ وَأَتُوبُ إِلَيْهِ<br>اللّٰهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ</div><button onclick="alert('اللہ تعالیٰ آپ کو ذکر و عبادت کی توفیق عطا فرمائے۔')">ذکر مکمل</button></section>
+</div>
+<section class="card"><h3>موبائل خاموش کرنے کی یاددہانی</h3><p>نماز کے وقت موبائل خاموش/بند رکھنے کی یاددہانی۔ ویب ایپ عام موبائل پر خود سے فون بند یا سائلنٹ نہیں کر سکتی؛ اس کے لیے فون کی اجازت یا نظام کی سہولت درکار ہوتی ہے۔</p><div class="controls"><button onclick="reminder()">نماز سے پہلے یاددہانی</button><button onclick="window.print()">اوقات پرنٹ کریں</button></div><div id="reminderStatus" class="muted"></div></section>
+<div class="footer">Made by Mufti Shoaib Allai<br><span class="muted">آذان واچ — ابتدائی ویب ورژن</span></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function pad(n){return String(n).padStart(2,'0')}
+function fmt(d){return pad(d.getHours())+':'+pad(d.getMinutes())}
+function tick(){let d=new Date();$('clock').textContent=pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());$('solar').textContent=d.toLocaleDateString('ur-PK',{year:'numeric',month:'long',day:'numeric'});$('dateLine').textContent=d.toLocaleDateString('ur-PK',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+' | '+d.toLocaleTimeString('ur-PK');try{$('hijri').textContent='ہجری: '+new Intl.DateTimeFormat('ur-PK-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(d)}catch(e){$('hijri').textContent='ہجری تاریخ دستیاب نہیں'};updateNext()}
+setInterval(tick,1000);
+function toMin(h){return Math.round(h*60)}
+function hhmm(m){m=(Math.round(m)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60)}
+function calculate(){
+ let lat=Number($('lat').value),lon=Number($('lon').value);if(!Number.isFinite(lat)||!Number.isFinite(lon)){return}
+ let d=new Date(),N=Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(d.getFullYear(),0,0))/86400000);
+ let g=2*Math.PI/365*(N-1),eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+ let dec=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+ let noon=720-4*lon-eq+300; // UTC+5 local standard time
+ function angle(a){let c=(Math.sin(a*Math.PI/180)-Math.sin(lat*Math.PI/180)*Math.sin(dec))/(Math.cos(lat*Math.PI/180)*Math.cos(dec));return Math.acos(Math.max(-1,Math.min(1,c)))*180/Math.PI*4}
+ let sunrise=noon-angle(0.833),sunset=noon+angle(0.833),fajr=noon-angle(18),isha=noon+angle(18);
+ let asr=noon+Math.acos(Math.max(-1,Math.min(1,(Math.cos(Math.atan(1/(1+Math.tan(Math.abs(lat-dec*Math.PI/180)))))-Math.sin(lat*Math.PI/180)*Math.sin(dec))/(Math.cos(lat*Math.PI/180)*Math.cos(dec))))*180/Math.PI*4;
+ // practical approximate Asr (Hanafi shadow factor 2)
+ let latr=lat*Math.PI/180, decl=dec, alt=Math.atan(1/(2+Math.tan(Math.abs(latr-decl))));let ca=(Math.sin(alt)-Math.sin(latr)*Math.sin(decl))/(Math.cos(latr)*Math.cos(decl));asr=noon+Math.acos(Math.max(-1,Math.min(1,ca)))*180/Math.PI*4;
+ window.times={Fajr:fajr,Dhuhr:noon,Asr:asr,Maghrib:sunset,Isha:isha,Sunrise:sunrise,Sunset:sunset};
+ let names={Fajr:'فجر',Dhuhr:'ظہر',Asr:'عصر',Maghrib:'مغرب',Isha:'عشاء'};
+ $('prayerList').innerHTML=Object.keys(names).map(k=>`<div class="row"><span>${names[k]}</span><b>${hhmm(times[k])}</b></div>`).join('');
+ $('ishraq').textContent=hhmm(sunrise+20);$('chasht').textContent=hhmm(sunrise+90);
+ let night=(sunrise+1440-sunset);$('tahajjud').textContent=hhmm(sunset+night*2/3);
+ $('location').textContent='مقام: '+$('city').value+' (مقامی وقت UTC+5)';updateNext()
+}
+function updateNext(){if(!window.times)return;let now=new Date(),cur=now.getHours()*60+now.getMinutes(),keys=['Fajr','Dhuhr','Asr','Maghrib','Isha'],names={Fajr:'فجر',Dhuhr:'ظہر',Asr:'عصر',Maghrib:'مغرب',Isha:'عشاء'};let k=keys.find(k=>times[k]>cur);let mins;if(!k){k='Fajr';mins=times[k]+1440-cur}else mins=times[k]-cur;$('nextPrayer').textContent=names[k];$('nextTime').textContent='وقت: '+hhmm(times[k]);$('countdown').textContent='باقی: '+Math.floor(mins/60)+' گھنٹے '+Math.round(mins%60)+' منٹ'}
+function setAlarm(){let v=$('alarmTime').value;if(!v){$('alarmStatus').textContent='پہلے وقت منتخب کریں';return}localStorage.setItem('azanAlarm',v);$('alarmStatus').textContent='الارم مقرر: '+v+' — صفحہ کھلا رکھیں';}
+function alarmCheck(){let v=localStorage.getItem('azanAlarm'),d=new Date();if(v===pad(d.getHours())+':'+pad(d.getMinutes())&&d.getSeconds()<2){alert('آذان واچ: آپ کی مقررہ یاددہانی کا وقت ہوگیا ہے۔');localStorage.removeItem('azanAlarm');$('alarmStatus').textContent='الارم بج چکا ہے'}}
+setInterval(alarmCheck,1000);
+async function getWeather(){if(!navigator.geolocation){$('weatherNote').textContent='یہ براؤزر مقام معلوم نہیں کر سکتا';return}
+ $('weatherNote').textContent='مقام معلوم کیا جا رہا ہے…';navigator.geolocation.getCurrentPosition(async p=>{try{let url=`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code&timezone=auto`;let r=await fetch(url),j=await r.json();$('weather').textContent=Math.round(j.current.temperature_2m)+'°C';$('weatherNote').textContent='محسوس شدہ '+Math.round(j.current.apparent_temperature)+'°C • نمی '+j.current.relative_humidity_2m+'%';$('lat').value=p.coords.latitude.toFixed(4);$('lon').value=p.coords.longitude.toFixed(4);calculate()}catch(e){$('weatherNote').textContent='موسم حاصل نہ ہوسکا؛ انٹرنیٹ چیک کریں'}},()=>{$('weatherNote').textContent='مقام کی اجازت دیں یا عرض بلد/طول بلد درج کریں'})}
+function reminder(){if('Notification'in window){Notification.requestPermission().then(p=>{$('reminderStatus').textContent=p==='granted'?'اطلاع کی اجازت مل گئی۔ نماز کے وقت فون خاموش کرنے کے لیے فون کی سیٹنگ استعمال کریں۔':'اطلاع کی اجازت نہیں ملی۔'})}else $('reminderStatus').textContent='اس براؤزر میں نوٹیفکیشن دستیاب نہیں۔ فون کی خاموشی کی سیٹنگ استعمال کریں۔'}
+tick();calculate();
+</script></body></html>
