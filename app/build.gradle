@@ -1,12 +1,12 @@
-plugins { id 'com.android.application' }
+plugins { id "com.android.application" }
 android {
-    namespace 'pk.qari.azanwatch'
+    namespace "pk.qari.azanwatch"
     compileSdk 35
     defaultConfig {
-        applicationId 'pk.qari.azanwatch'
+        applicationId "pk.qari.azanwatch"
         minSdk 23
-        targetSdk 28
+        targetSdk 34
         versionCode 1
-        versionName '1.0'
+        versionName "1.0"
     }
 }
