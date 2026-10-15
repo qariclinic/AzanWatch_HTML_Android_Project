@@ -1,16 +1,36 @@
-name: CI
+name: Build
 
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
 
     steps:
-      - name: کوڈ حاصل کریں
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
-      - name: ٹیسٹ چلائیں
-        run: echo "یہاں اپنے ٹیسٹ کا کمانڈ لکھیں"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
